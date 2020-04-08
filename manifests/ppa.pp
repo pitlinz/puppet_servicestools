@@ -9,11 +9,13 @@ define pitlinz_servicestools::ppa(
     }
   }
 
-  if !defined(Package['python-software-properties']) {
-    package{'python-software-properties':
-      ensure => latest
+    if (($os::distro::id == 'Ubuntu') and ($::os::distro::release::major < '18.04')) {
+      if !defined(Package['python-software-properties']) {
+          package{'python-software-properties':
+            ensure => latest
+            }
+        }
     }
-  }
 
   exec{"add-apt-repository $name":
     command => "/usr/bin/add-apt-repository ppa:${ppaname}",
